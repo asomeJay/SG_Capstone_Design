@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+    <script>
+    if (navigator.geolocation) {
+            var new_div = document.createElement("div");
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                new_div.innerHTML(pos.coords);
+                document.body.appendChild(new_div);
+            })
+        }
+    </script>
+  </body>
+</html>

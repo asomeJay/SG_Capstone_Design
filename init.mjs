@@ -1,18 +1,19 @@
 
-const express = require('express')
-const app = express()
+import express from 'express';
+import url from 'url';
+import requestip from 'request-ip';
+import request from 'request';
+import globalRouter from './mask.mjs';
+
+const app = express();
+
 const port = 8000;
-const url = require('url')
-const requestip = require('request-ip')
-const request = require('request')
-const globalRouter = require('./mask.js')
 
 app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
 
 let date_ob = new Date();
 const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
-const mask = () =>request({
+const mask = () => request({
     url: mask_url,
     method: 'GET'
 }, (error, res, body) => {
@@ -78,8 +79,6 @@ app.post('/', (req, res) => {
 
 });
 
-app.use('/mask', globalRouter.location);
+app.use('/mask', globalRouter);
 
-
-exports.mask = mask;
-exports.app = app;
+export default app;
