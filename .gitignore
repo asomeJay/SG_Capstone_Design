@@ -115,3 +115,6 @@ dist
 .pnp.*
 dasdfasdf
 dasdfasdf.save
+.bashrc
+.bash_logout
+.bash_history
