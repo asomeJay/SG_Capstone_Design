@@ -113,3 +113,15 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+dasdfasdf
+dasdfasdf.save
+.bashrc
+.bash_logout
+.bash_history
+.sudo_as_admin_successful
+.gitconfig
+.profile
+.viminfo
+
+.pm2/
+.ssh/
