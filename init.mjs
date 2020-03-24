@@ -2,9 +2,8 @@
 import express from 'express';
 import url from 'url';
 import requestip from 'request-ip';
-import request from 'request';
+import request from 'request-promise';
 import bodyParser from 'body-parser';
-import globalRouter from './mask.mjs';
 
 const app = express();
 
@@ -13,7 +12,7 @@ const port = 8000;
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-//
+
 let date_ob = new Date();
 const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
 // current date
@@ -52,7 +51,6 @@ app.get('/', (req, res) => {
         "time": `${time_expression}`,
         "ip": `${requestip.getClientIp(req).slice(7)}`
     }
-
     var t = Object.assign(ret, url_parts.query)
     res.send(t)
     console.log(t);
@@ -70,7 +68,6 @@ app.post('/', (req, res) => {
 
     var t = Object.assign(ret, url_parts.query)
     res.send(req.body);
-    console.log(t);
 
 });
 
@@ -83,16 +80,17 @@ app.get('/mask', async (req, res) => {
         method: 'GET',
         json: true
     };
+    console.log("ENTER");
     await request(request_option, (_, __, body) => {
         console.log("?");
         mask_cnt = body.stores[0];
-        var result = time_expression + " " + mask_cnt.name +" 마스크가 ";
+    });
+    var result = time_expression + " " + mask_cnt.name +" 마스크가 ";
         result += mask_cnt.remain_stat + " 입니다.";
         console.log(result);
 
         res.send(result);
 
-    });
 });
 
 export default app;
