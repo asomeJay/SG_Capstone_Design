@@ -3,6 +3,7 @@ import express from 'express';
 import url from 'url';
 import requestip from 'request-ip';
 import request from 'request';
+import bodyParser from 'body-parser';
 import globalRouter from './mask.mjs';
 
 const app = express();
@@ -10,15 +11,11 @@ const app = express();
 const port = 8000;
 
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 let date_ob = new Date();
 const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
-const mask = () => request({
-    url: mask_url,
-    method: 'GET'
-}, (error, res, body) => {
-    console.log(body.count);
-});
 // current date
 // adjust 0 before single digit date
 let date = ("0" + date_ob.getDate()).slice(-2);
@@ -47,8 +44,7 @@ if (seconds < 10)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 app.get('/', (req, res) => {
-    mask();
-    url_parts = url.parse(req.url, true);
+    var url_parts = url.parse(req.url, true);
     var time_expression = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
     var ret = {
         "email": "museum114@naver.com",
@@ -60,7 +56,6 @@ app.get('/', (req, res) => {
     var t = Object.assign(ret, url_parts.query)
     res.send(t)
     console.log(t);
-
 });
 //app.get('/mask', mask());
 app.post('/', (req, res) => {
@@ -79,6 +74,25 @@ app.post('/', (req, res) => {
 
 });
 
-app.use('/mask', globalRouter);
+app.get('/mask', async (req, res) => {
+    var mask_cnt = ":";
+    var time_expression = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+
+    var request_option = {
+        url: mask_url,
+        method: 'GET',
+        json: true
+    };
+    await request(request_option, (_, __, body) => {
+        console.log("?");
+        mask_cnt = body.stores[0];
+        var result = time_expression + " " + mask_cnt.name +" 마스크가 ";
+        result += mask_cnt.remain_stat + " 입니다.";
+        console.log(result);
+
+        res.send(result);
+
+    });
+});
 
 export default app;

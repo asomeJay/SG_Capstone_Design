@@ -2,8 +2,8 @@ import express from "express";
 
 const globalRouter = express.Router();
 
-
 export const location = (req, res) => {
+    console.log(res);
     if (document.navigator.geolocation) {
         console.log("IN");
         var new_div = document.createElement("div");
