@@ -13,6 +13,7 @@ const app = express();
 moment.tz.setDefault("Asia/Seoul");
 const port = 8000;
 var geo;
+var user_ip;
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -49,7 +50,7 @@ app.post('/', (req, res) => {
 });
 
 app.get('/mask', async (req, res) => {
-    var user_ip = requestip.getClientIp(req).slice(7);
+    user_ip = requestip.getClientIp(req).slice(7);
     geo = geoip.lookup(user_ip);
     const mask_info = await find_nearest_store(geo.ll[0], geo.ll[1]);
 
@@ -80,10 +81,9 @@ async function find_nearest_store(lat, lon) {
         json: true
     };
 
-    console.log("ENTER");
+    console.log(moment().format("YYYY-MM-DD HH:mm:ss"), geo.city, lat, lon, user_ip);
     
     await request(request_option, (_, __, body) => {
-        console.log("?");
         mask_name = body.stores[0].name;
         mask_addr = body.stores[0].addr;
         mask_remain_stat = body.stores[0].remain_stat;
