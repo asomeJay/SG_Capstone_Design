@@ -15,8 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node -r esm init.js",
-    "safestart": "node --experimental-modules init.mjs"
+    "start": "node -r esm init.js"
   },
   "repository": {
     "type": "git",
