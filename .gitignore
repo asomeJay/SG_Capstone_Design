@@ -125,3 +125,5 @@ dasdfasdf.save
 
 .pm2/
 .ssh/
+
+.env/
