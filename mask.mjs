@@ -13,9 +13,8 @@ const requestMethod = "GET";
 const hostName = 'https://geolocation.apigw.ntruss.com'
 const requestUrl= '/geolocation/v2/geoLocation'
 
-const timeStamp = Math.floor(+new Date).toString();
-
 export const user_location_info = (req, res) => {
+    const timeStamp = Math.floor(+new Date).toString();
     const user_ip = requestip.getClientIp(req).slice(7);
     const sortedSet = {};
     sortedSet["ip"] = user_ip;
