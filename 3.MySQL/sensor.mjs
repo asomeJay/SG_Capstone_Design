@@ -1,7 +1,7 @@
 import mysql from 'mysql';
-
+import{ conn }from './mysql.mjs';
 export const insert_sensor = (device, unit, type, value, seq, ip) => {
-    sensor_instance = {
+    var sensor_instance = {
         seq: seq,
         device: device,
         unit: unit,
@@ -10,7 +10,7 @@ export const insert_sensor = (device, unit, type, value, seq, ip) => {
         ip: ip.replace(/^.*:/, '')
     };
 
-    var query = connection.query('insert into sensors set?', sensor_instance, (err, row, col) => {
+    var query = conn.query('insert into sensors set?', sensor_instance, (err, row, col) => {
         try {
             if (err) throw err;
             console.log("database insertion ok = %j", sensor_instance);
