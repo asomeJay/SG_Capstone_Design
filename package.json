@@ -1,23 +1,36 @@
 {
   "name": "kimjaewon",
-  "type": "modules",
+  "type": "module",
   "version": "1.0.0",
   "description": "capstone",
+  "module" : "commonjs",
   "main": "init.js",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "node-mysql": "^0.4.2",
+    "node-schedule": "^1.3.2",
+    "nohup": "^0.1.0",
     "pm2": "^4.2.3",
+    "python-shell": "^1.0.8",
     "request": "^2.88.2",
     "request-ip": "^2.1.3",
     "request-promise": "^4.2.5"
   },
-  "devDependencies": {},
-    "mysql": "^2.18.1",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0"
+  },
+  "mysql": "^2.18.1",
   "scripts": {
-    "start": "node -r esm init.js",
-    "safestart": "node --experimental-modules init.mjs"
+    "build": "babel 3.MySQL/mysql.mjs -d dist",
+    "dev:server": "nodemon --exec babel-node 3.MySQL/mysql.mjs --delay 2",
+    "start": "npm run build && node dist/mysql.js",
+    "safestart": "node --experimental-modules 3.MySQL/mysql.mjs"
   },
   "repository": {
     "type": "git",
