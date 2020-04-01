@@ -4,8 +4,13 @@ import  bodyParser from 'body-parser'
 import  dotenv from 'dotenv'
 import  mysql from 'mysql'
 import { insert_sensor } from './sensor.mjs'
-import PythonShell from 'python-shell';
+import PythonShell from 'python-shell'
+import fs from 'fs'
 dotenv.config();
+
+setTimeout(() => {
+  console.log("??");
+}, 2200000);
 
 const app = express();
 const port = 8000;
@@ -20,7 +25,53 @@ export const conn = mysql.createConnection({
   database: 'mydb'
 });
 
+function addZero(data){
+  return (data<10) ? "0"+data : data;
+}
+
+function getTimestampToDate(timestamp){
+  console.log(timestamp);
+  var date = new Date(timestamp * 1000);
+  date.setHours(date.getHours() + 9);
+  console.log(date.toLocaleString());
+  return date.toLocaleString();
+}
+
 conn.connect();
+app.get('/graph', async (req, res) => {
+
+    var html = fs.readFile('./graph1.html', function (err, html) {
+    html = " " + html;
+    console.log('read file');
+    var qstr = `select * from temperature;`;
+
+    conn.query(qstr, (err, row, col) => {
+      try {
+        if (err) throw err;
+        var date = new Date()
+        var data = "";
+        var comma = "";
+        for (var i = 0; i < row.length; i++) {
+          var r = row[i];
+          data += comma + "['" + getTimestampToDate(r.time) + "'," + r.temp + "]";
+          comma = ",";
+        }
+  
+        var header = "data.addColumn('string', 'time');";
+        header += "data.addColumn('number', 'temp');";
+        html = html.replace("<%HEADER%>", header);
+        html = html.replace("<%DATA%>", data);
+  
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write(html);
+        res.end();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
+});
+
 app.get('/sensor', function (req, res) {
   var url_parts = url.parse(req.url, true);
 
@@ -39,7 +90,6 @@ app.post('/sensor', function (req, res) {
   conn.query(`INSERT INTO temperature VALUES (${time}, ${temperature})`, function (error, results, fields) {
     try {
       if (error) throw error;
-      console.log(results, fields);
     } catch (error) {
       console.log("ERROR", error);
     }
@@ -69,7 +119,7 @@ var server = app.listen(port, () => {
   var host = server.address().address;
   var port = server.address().port;
   console.log(`Listening on port ${host}, ${port}`);
-  give_weather_data();
+  //give_weather_data();
     const interval = setInterval(function () {
         give_weather_data();
     }, 3600000);
