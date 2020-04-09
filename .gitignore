@@ -125,8 +125,9 @@ dasdfasdf.save
 
 .pm2/
 .ssh/
-
-.env/
+package.json
+package-lock.json
+.babelrc
 .env
-
+.babelrc
 

@@ -1,16 +1,12 @@
-import express from 'express'
+/*import express from 'express'
 import url from 'url'
 import  bodyParser from 'body-parser'
 import  dotenv from 'dotenv'
 import  mysql from 'mysql'
-import { insert_sensor } from './sensor.mjs'
+import { insert_sensor } from './sensor.js'
 import PythonShell from 'python-shell'
 import fs from 'fs'
 dotenv.config();
-
-setTimeout(() => {
-  console.log("??");
-}, 2200000);
 
 const app = express();
 const port = 8000;
@@ -39,7 +35,7 @@ function getTimestampToDate(timestamp){
 
 conn.connect();
 app.get('/graph', async (req, res) => {
-
+    console.log("graph");
     var html = fs.readFile('./graph1.html', function (err, html) {
     html = " " + html;
     console.log('read file');
@@ -66,6 +62,7 @@ app.get('/graph', async (req, res) => {
         res.write(html);
         res.end();
       } catch (error) {
+	      console.log("ERROR");
         console.log(error);
       }
     });
@@ -120,7 +117,7 @@ var server = app.listen(port, () => {
   var port = server.address().port;
   console.log(`Listening on port ${host}, ${port}`);
   //give_weather_data();
-    const interval = setInterval(function () {
-        give_weather_data();
-    }, 3600000);
-});
+  //  const interval = setInterval(function () {
+//        give_weather_data();
+ //   }, 3600000);
+});*/

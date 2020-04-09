@@ -2,7 +2,7 @@ import dot from 'dotenv'
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import requestip from 'request-ip';
-import { find_nearest_store } from './init.mjs';
+import { find_nearest_store } from './init.js';
 
 dot.config();
 

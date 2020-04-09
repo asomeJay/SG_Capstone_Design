@@ -6,48 +6,49 @@ import request from 'request-promise';
 import bodyParser from 'body-parser';
 import moment from 'moment';
 import timezone from 'moment-timezone';
-import { user_location_info } from './mask.mjs';
+import { user_location_info } from './mask';
 import axios from 'axios';
 import async from 'async'
+import { sensorGet } from './sensor';
+import { routes } from './routes';
+
+moment.tz.setDefault("Asia/Seoul");
 
 const app = express();
-moment.tz.setDefault("Asia/Seoul");
 const port = 8000;
-
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
-// current date
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-app.get('/', (req, res) => {
-    var url_parts = url.parse(req.url, true);
+
+app.listen(port, () => console.log(`app listening on port ${port}!`))
+app.use(routes.sensor, sensorGet);
+
+const basic = (req) => {
     var ret = {
         "email": "museum114@naver.com",
         "stuno": "20150038",
         "time": `${moment().format("YYYY-MM-DD HH:mm:ss")}`,
         "ip": `${requestip.getClientIp(req).slice(7)}`
     }
+    return ret;
+}
+
+
+app.get('/', (req, res) => {
+    var url_parts = url.parse(req.url, true);
+    var ret = basic(req);
     var t = Object.assign(ret, url_parts.query)
     res.send(t)
-    console.log(t);
 });
 
 app.post('/', (req, res) => {
-    var ret = {
-        "email": "museum114@naver.com",
-        "stuno": "20150038",
-        "time": `${moment().format("YYYY-MM-DD HH:mm:ss")}`,
-        "ip": `${requestip.getClientIp(req).slice(7)}`
-    }
+    var ret = baisc(req);
     var t = Object.assign(ret, req.body);
-    console.log(t);
     res.setHeader("200", { "Content-Type": "text/plain" });
     res.send(t);
-    res.end(JSON.stringify(t, null, 2));
-
 });
 
 app.get('/mask', (req, res) => {
@@ -92,4 +93,6 @@ export async function find_nearest_store(user_location_info, user_ip, res) {
     result += "</font></b>";
     res.send(result);
 }
+
+app.get('/', )
 export default app;
