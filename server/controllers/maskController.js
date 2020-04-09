@@ -2,12 +2,13 @@ import dot from 'dotenv'
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import requestip from 'request-ip';
-import { find_nearest_store } from './init.js';
 
 dot.config();
-
+/*
 const access_key = process.env.access_key;
 const secret_key = process.env.secret_key;
+
+const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
 
 const requestMethod = "GET";
 const hostName = 'https://geolocation.apigw.ntruss.com'
@@ -63,3 +64,4 @@ function makeSignature(secretKey, method, baseString, timestamp, accessKey) {
     return hash.toString(CryptoJS.enc.Base64);
 }
 
+*/

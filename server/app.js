@@ -6,11 +6,8 @@ import request from 'request-promise';
 import bodyParser from 'body-parser';
 import moment from 'moment';
 import timezone from 'moment-timezone';
-import { user_location_info } from './mask';
-import axios from 'axios';
-import async from 'async'
-import { sensorGet } from './sensor';
-import { routes } from './routes';
+import routes from './routes.js';
+import globalRouter from './routers/globalRouter.js'
 
 moment.tz.setDefault("Asia/Seoul");
 
@@ -21,10 +18,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const mask_url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
+app.use(routes.home, globalRouter);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
-app.use(routes.sensor, sensorGet);
 
 const basic = (req) => {
     var ret = {
@@ -35,7 +31,6 @@ const basic = (req) => {
     }
     return ret;
 }
-
 
 app.get('/', (req, res) => {
     var url_parts = url.parse(req.url, true);
