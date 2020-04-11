@@ -8,7 +8,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import routes from './routes.js';
 import globalRouter from './routers/globalRouter.js'
-
+import { graphGet } from './controllers/mysqlController.js'
 moment.tz.setDefault("Asia/Seoul");
 
 const app = express();

@@ -1,7 +1,8 @@
 import url from 'url';
 import moment from 'moment';
 import { conn } from './mysqlController.js';
-import { isNullOrUndefined } from 'util';
+
+moment.tz.setDefault("Asia/Seoul");
 
 export const sensorPost = (req, res) => {
     const {
@@ -22,6 +23,7 @@ export const sensorPost = (req, res) => {
 }
 
 export const sensorGet = (req, res) => {
+    
     const urlQuery = url.parse(req.url, true).query;
     const deviceId = urlQuery.device_id;
     const temperature = urlQuery.temperature_value;
@@ -33,17 +35,31 @@ export const sensorGet = (req, res) => {
             status: "ok",
             time: `${moment().format("YYYY-MM-DD HH:mm:ss")}`,
         };
+
+        conn.query(`INSERT INTO sensors (seq, \
+            device, value) VALUES (${sequenceNumber}, ${deviceId}, ${temperature})`, function (error, results, fields) {
+            try {
+                if (error) throw error;
+            } catch (error) {
+                console.log("ERROR", error);
+            }
+        });
+
         res.json(send);
+
     } else if (deviceId === '') {
-        console.log("?!?");
+        conn.query(`SELECT * FROM sensors`, (error, results, body) => {
+
+            res.json(results);
+        });
         // All value   
     } else {
         // special value : deviceId와 일치하는 것만 빼준다. 
-        conn.query(`SELECT seq, time, value, device FROM sensors where device = ${deviceId}`, (error, results, body) => {
+        conn.query(`SELECT * FROM sensors where device = ${deviceId}`, (error, results, body) => {
                 try {
-                    if (error) throw error;
-                    console.log(results);
-                    console.log(body);
+                    if (error)
+                        throw error;
+                    res.json(results);
                 } catch (error) {
                     console.log("ERROR", error);
                 }

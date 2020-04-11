@@ -1,7 +1,10 @@
 
 import dotenv from 'dotenv'
 import mysql from 'mysql'
+import moment from 'moment'
+import fs from 'fs';
 
+moment.tz.setDefault("Asia/Seoul");
 dotenv.config();
 
 export const conn = mysql.createConnection({
@@ -13,16 +16,17 @@ export const conn = mysql.createConnection({
 });
 
 conn.connect();
-/*
+
 function getTimestampToDate(timestamp){
   var date = new Date(timestamp * 1000);
   date.setHours(date.getHours() + 9);
   return date.toLocaleString();
 }
 
-app.get('/graph', async (req, res) => {
+export const graphGet = (req, res) => {
     console.log("graph");
     var html = fs.readFile('./graph1.html', function (err, html) {
+        console.log(err);
     html = " " + html;
     console.log('read file');
     var qstr = `select * from temperature;`;
@@ -30,7 +34,6 @@ app.get('/graph', async (req, res) => {
     conn.query(qstr, (err, row, col) => {
       try {
         if (err) throw err;
-        var date = new Date()
         var data = "";
         var comma = "";
         for (var i = 0; i < row.length; i++) {
@@ -53,8 +56,8 @@ app.get('/graph', async (req, res) => {
       }
     });
   });
-});
-
+}
+/*
 app.get('/sensor', function (req, res) {
   var url_parts = url.parse(req.url, true);
 
@@ -98,12 +101,4 @@ function give_weather_data() {
       console.log(error);
     }
   });
-}
-
-var server = app.listen(port, () => {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log(`Listening on port ${host}, ${port}`);
-
-});
-*/
+}*/
